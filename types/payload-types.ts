@@ -10,10 +10,15 @@ export interface Config {
   collections: {
     users: User
     events: Event
+    pages: Page
+    media: Media
+    topics: Topic
     "payload-preferences": PayloadPreference
     "payload-migrations": PayloadMigration
   }
-  globals: {}
+  globals: {
+    menu: Menu
+  }
 }
 export interface User {
   id: string
@@ -31,11 +36,113 @@ export interface User {
 export interface Event {
   id: string
   title: string
+  image?: string | Media | null
   date: string
   location: string
-  description: {
-    [k: string]: unknown
-  }[]
+  summary: string
+  topics?: (string | Topic)[] | null
+  description?:
+    | {
+        [k: string]: unknown
+      }[]
+    | null
+  updatedAt: string
+  createdAt: string
+}
+export interface Media {
+  id: string
+  alt: string
+  updatedAt: string
+  createdAt: string
+  url?: string | null
+  filename?: string | null
+  mimeType?: string | null
+  filesize?: number | null
+  width?: number | null
+  height?: number | null
+  sizes?: {
+    card?: {
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
+    portrait?: {
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
+    square?: {
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
+    feature?: {
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
+  }
+}
+export interface Topic {
+  id: string
+  title: string
+  slug?: string | null
+  updatedAt: string
+  createdAt: string
+}
+export interface Page {
+  id: string
+  name: string
+  title: string
+  heroType: "minimal" | "contentAboveMedia" | "contentLeftOfMedia"
+  layout?:
+    | (
+        | {
+            displayType: "grid"
+            id?: string | null
+            blockName?: string | null
+            blockType: "events-block"
+          }
+        | {
+            items?:
+              | {
+                  blocks?: {
+                    relationTo: "events"
+                    value: string | Event
+                  } | null
+                  id?: string | null
+                }[]
+              | null
+            id?: string | null
+            blockName?: string | null
+            blockType: "bento-block"
+          }
+        | {
+            text: string
+            link: {
+              type?: ("page" | "custom") | null
+              label: string
+              page?: (string | null) | Page
+              url?: string | null
+            }
+            id?: string | null
+            blockName?: string | null
+            blockType: "cta-text-block"
+          }
+      )[]
+    | null
   updatedAt: string
   createdAt: string
 }
@@ -65,7 +172,19 @@ export interface PayloadMigration {
   updatedAt: string
   createdAt: string
 }
-
-// declare module "payload" {
-//   export interface GeneratedTypes extends Config {}
-// }
+export interface Menu {
+  id: string
+  nav?:
+    | {
+        link: {
+          type?: ("page" | "custom") | null
+          label: string
+          page?: (string | null) | Page
+          url?: string | null
+        }
+        id?: string | null
+      }[]
+    | null
+  updatedAt?: string | null
+  createdAt?: string | null
+}

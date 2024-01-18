@@ -1,20 +1,22 @@
-import { collectionSchema, eventSchema } from "@/schemas/payload"
+import { collectionSchema, pageSchema } from "@/schemas/payload"
+import qs from "qs"
 import * as z from "zod"
 
 import { handler, HTTPError, safeFetch } from "@/lib/safe-fetch"
 
-export const events = handler({
+export const page = handler({
   schema: z.object({}),
-  cb: async () => {
+  cb: async ({ where }) => {
+    const query = qs.stringify({ where }, { addQueryPrefix: true })
     try {
       const request = await safeFetch(
-        collectionSchema(eventSchema),
-        `${process.env.NEXT_PUBLIC_API_URL}/events`,
+        collectionSchema(pageSchema),
+        `${process.env.NEXT_PUBLIC_API_URL}/pages${query}`,
         {
           method: "GET",
           credentials: "include",
           next: {
-            tags: ["events"],
+            tags: ["page"],
           },
         }
       )

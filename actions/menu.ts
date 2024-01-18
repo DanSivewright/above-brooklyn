@@ -1,4 +1,3 @@
-import { globalSchema, menuSchema, pageSchema } from "@/schemas/payload"
 import qs from "qs"
 import * as z from "zod"
 
@@ -22,8 +21,8 @@ export const menu = handler({
                   .union([z.literal("page"), z.literal("custom")])
                   .optional(),
                 label: z.string(),
-                page: z.union([z.string().nullable(), pageSchema]).optional(),
-                url: z.string().optional().nullable(),
+                // page: z.union([z.string().nullable(), pageSchema]).optional(),
+                // url: z.string().optional().nullable(),
               }),
               id: z.string().optional().nullable(),
             })

@@ -51,6 +51,13 @@ export class HTTPError extends Error {
 
 const baseSchema = z.object({
   depth: z.number().optional(),
+  where: z
+    .record(
+      z.object({
+        equals: z.string().optional(),
+      })
+    )
+    .optional(),
 })
 
 export const handler =
